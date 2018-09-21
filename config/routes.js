@@ -5,10 +5,8 @@ const jwt = require("jsonwebtoken");
 let secret = require("../_secrets/keys");
 const db = require("../database/dbConfig");
 
+secret = secret.jwtKey;
 
-secret = secret.jwtKey
-
-console.log(secret)
 module.exports = server => {
   server.post("/api/register", register);
   server.post("/api/login", login);
@@ -30,7 +28,7 @@ function register(req, res) {
   const creds = req.body;
   const hash = bcrypt.hashSync(creds.password, 14);
   creds.password = hash;
-  console.log(secret)
+  console.log(secret);
   db("users")
     .insert(creds)
     .then(ids => {
@@ -48,10 +46,8 @@ function register(req, res) {
     })
     .catch(err => res.status(500).json({ err2: err }));
 }
-// implement user registration
 
 function login(req, res) {
-  // implement user login
   const creds = req.body;
   db("users")
     .where({ username: creds.username })
