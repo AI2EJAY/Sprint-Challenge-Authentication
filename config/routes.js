@@ -1,10 +1,14 @@
 const axios = require("axios");
 const bcrypt = require("bcryptjs");
 const { authenticate } = require("./middlewares");
-const db = require("../database/dbConfig");
 const jwt = require("jsonwebtoken");
-const secret = require("../_secrets/keys");
+let secret = require("../_secrets/keys");
+const db = require("../database/dbConfig");
 
+
+secret = secret.jwtKey
+
+console.log(secret)
 module.exports = server => {
   server.post("/api/register", register);
   server.post("/api/login", login);
@@ -26,7 +30,7 @@ function register(req, res) {
   const creds = req.body;
   const hash = bcrypt.hashSync(creds.password, 14);
   creds.password = hash;
-
+  console.log(secret)
   db("users")
     .insert(creds)
     .then(ids => {
